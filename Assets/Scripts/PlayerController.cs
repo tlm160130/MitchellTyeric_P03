@@ -1,12 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-
     public CharacterController controller;
+
+    public int maxHealth = 100;
+    public int currentHealth;
+
+    public int maxEnergy = 100;
+    public int currentEnergy;
+
+    public HealthBar healthBar;
+    public EnergyBar energyBar;
 
     public Transform cam;
 
@@ -19,12 +28,17 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
+
+        currentEnergy = 0;
+        energyBar.SetMaxEnergy(maxEnergy);
     }
 
     // Update is called once per frame
     void Update()
     {
+
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
@@ -42,5 +56,17 @@ public class PlayerController : MonoBehaviour
 
             controller.Move(moveDirection.normalized * speed * Time.deltaTime);
         }
+
+        if (Input.GetKey(KeyCode.Z))
+        {
+            ChargeEnergy(5);
+        }
+    }
+
+    void ChargeEnergy(int charge)
+    {
+        currentEnergy += charge;
+
+        energyBar.SetEnergy(currentEnergy);
     }
 }
