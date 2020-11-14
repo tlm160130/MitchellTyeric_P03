@@ -26,5 +26,9 @@ public class AnimationController : MonoBehaviour
             animator.SetBool("IsWalking", false);
         }
 
+        if (Input.GetKey("z"))
+        {
+            animator.Play("Punching");
+        }
     }
 }

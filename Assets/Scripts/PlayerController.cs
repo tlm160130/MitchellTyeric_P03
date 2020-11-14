@@ -42,31 +42,19 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(x, 0f, z).normalized;
+        Vector3 move = transform.right * x + transform.forward * z; //Moves based on x and z movement and where the player is facing
+        //don't want to use new Vector3() because those are GLOBAL Coordinates
 
-        if (direction.magnitude >= 0.1f)
-        {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+        controller.Move(move * speed * Time.deltaTime);
 
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-
-            controller.Move(moveDirection.normalized * speed * Time.deltaTime);
-
-            GetComponent<Animator>().Play("Walking");
-        }
-
-        if (Input.GetKey(KeyCode.Z))
+        if (Input.GetKey(KeyCode.B))
         {
             ChargeEnergy(2);
         }
 
-        if (Input.GetKey(KeyCode.H))
+        if (Input.GetKey(KeyCode.C))
         {
-            LoseEnergy(4);
+            Super1(10);
         }
     }
 
@@ -77,7 +65,7 @@ public class PlayerController : MonoBehaviour
         energyBar.SetEnergy(currentEnergy);
     }
 
-    void LoseEnergy(int lose)
+    void Super1(int lose)
     {
         currentEnergy -= lose;
 
