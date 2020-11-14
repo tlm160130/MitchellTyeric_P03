@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
 
-        currentEnergy = 0;
+        currentEnergy = maxEnergy;
         energyBar.SetMaxEnergy(maxEnergy);
     }
 
@@ -55,17 +55,31 @@ public class PlayerController : MonoBehaviour
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
             controller.Move(moveDirection.normalized * speed * Time.deltaTime);
+
+            GetComponent<Animator>().Play("Walking");
         }
 
         if (Input.GetKey(KeyCode.Z))
         {
-            ChargeEnergy(5);
+            ChargeEnergy(2);
+        }
+
+        if (Input.GetKey(KeyCode.H))
+        {
+            LoseEnergy(4);
         }
     }
 
     void ChargeEnergy(int charge)
     {
         currentEnergy += charge;
+
+        energyBar.SetEnergy(currentEnergy);
+    }
+
+    void LoseEnergy(int lose)
+    {
+        currentEnergy -= lose;
 
         energyBar.SetEnergy(currentEnergy);
     }
