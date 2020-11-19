@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
 {
     public CharacterController controller;
 
+    public GameObject SpecialAttackUI;
+    public GameObject SpecialAttack2UI;
+
     public int maxHealth = 100;
     public int currentHealth;
 
@@ -52,9 +55,24 @@ public class PlayerController : MonoBehaviour
             ChargeEnergy(2);
         }
 
-        if (Input.GetKey(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             Super1(10);
+        }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Super2(20);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            ShowSpecials();
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            StopShowingSpecials();
         }
     }
 
@@ -70,5 +88,24 @@ public class PlayerController : MonoBehaviour
         currentEnergy -= lose;
 
         energyBar.SetEnergy(currentEnergy);
+    }
+
+    void Super2(int lose)
+    {
+        currentEnergy -= lose;
+
+        energyBar.SetEnergy(currentEnergy);
+    }
+
+    void ShowSpecials()
+    {
+        SpecialAttackUI.SetActive(true);
+        SpecialAttack2UI.SetActive(true);
+    }
+
+    void StopShowingSpecials()
+    {
+        SpecialAttackUI.SetActive(false);
+        SpecialAttack2UI.SetActive(false);
     }
 }
