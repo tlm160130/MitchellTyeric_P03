@@ -7,22 +7,16 @@ public class AnimationController : MonoBehaviour
 
     public Animator animator;
 
-    List<string> animlist = new List<string>(new string[] { "Animation 1", "Animation 2", "Animation 3"});
-    List<string> spellList = new List<string>(new string[] { "Cast Spell", "Two Hand Cast" });
+    List<string> animlist = new List<string>(new string[] { "Animation 1", "Animation 2", "Animation 3" });
+    List<string> kicklist = new List<string>(new string[] { "Animation 4", "Animation 5"});
     public int combonum;
     public float reset;
     public float resetTime;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        animator = GetComponent<Animator>();
-    }
-
     // Update is called once per frame
     void Update()
     {
-       if (Input.GetButtonDown("Fire1") && combonum < 3)
+       if (Input.GetKeyDown(KeyCode.Mouse0) && combonum < 3)
         {
             animator.SetTrigger(animlist[combonum]);
             combonum++;
@@ -47,24 +41,29 @@ public class AnimationController : MonoBehaviour
             resetTime = 1f;
         }
 
-       if (Input.GetKey("w"))
+        if (Input.GetKeyDown(KeyCode.Mouse1) && combonum < 2)
         {
-            animator.SetBool("IsWalking", true);
+            animator.SetTrigger(kicklist[combonum]);
+            combonum++;
+            reset = 0f;
         }
-
-        if (!Input.GetKey("w"))
+        if (combonum > 0)
         {
-            animator.SetBool("IsWalking", false);
+            reset += Time.deltaTime;
+            if (reset > resetTime)
+            {
+                animator.SetTrigger("Reset");
+                combonum = 0;
+            }
         }
-
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (combonum == 2)
         {
-            animator.SetTrigger("Cast Spell");
+            resetTime = 3f;
+            combonum = 0;
         }
-
-        if (Input.GetKeyDown(KeyCode.X))
+        else
         {
-            animator.SetTrigger("Two Hand Cast");
+            resetTime = 1f;
         }
     }
 }

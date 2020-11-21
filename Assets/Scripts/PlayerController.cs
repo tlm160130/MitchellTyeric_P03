@@ -7,8 +7,12 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public CharacterController controller;
+    public Animator animator;
+    public ParticleSystem chargeLight;
+    public AudioSource chargeAudio;
+    public AudioSource menuOpenSound;
+    public AudioSource menuCloseSound;
 
-    public GameObject SpecialAttackUI;
     public GameObject SpecialAttack2UI;
 
     public int maxHealth = 100;
@@ -31,6 +35,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
+
+
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
 
@@ -50,19 +57,25 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(move * speed * Time.deltaTime);
 
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            animator.SetBool("IsWalking", true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.W))
+        {
+            animator.SetBool("IsWalking", false);
+        }
+
         if (Input.GetKey(KeyCode.B))
         {
             ChargeEnergy(2);
         }
 
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            Super1(10);
-        }
-
         if (Input.GetKeyDown(KeyCode.X))
         {
             Super2(20);
+            animator.SetTrigger("Two Hand Cast");
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -81,13 +94,9 @@ public class PlayerController : MonoBehaviour
         currentEnergy += charge;
 
         energyBar.SetEnergy(currentEnergy);
-    }
 
-    void Super1(int lose)
-    {
-        currentEnergy -= lose;
-
-        energyBar.SetEnergy(currentEnergy);
+        chargeLight.Play();
+        chargeAudio.Play();
     }
 
     void Super2(int lose)
@@ -99,13 +108,13 @@ public class PlayerController : MonoBehaviour
 
     void ShowSpecials()
     {
-        SpecialAttackUI.SetActive(true);
         SpecialAttack2UI.SetActive(true);
+        menuOpenSound.Play();
     }
 
     void StopShowingSpecials()
     {
-        SpecialAttackUI.SetActive(false);
         SpecialAttack2UI.SetActive(false);
+        menuCloseSound.Play();
     }
 }
